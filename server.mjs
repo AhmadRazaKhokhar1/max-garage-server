@@ -1,0 +1,34 @@
+import express from 'express';
+import cors from 'cors'
+import dotenv from 'dotenv';
+import userRouter from './routes/userRoutes.js';
+import mongoose from 'mongoose';
+dotenv.config();
+
+const uri = process.env.MONGO_URI_USERS;
+const port = process.env.PORT;
+const app = express();
+
+//middlewares
+app.use(cors());
+app.use(express.json());
+
+//routes
+app.use('/max-garage/api/', userRouter)
+
+app.use('/imagesCache', express.static('imagesCache'))
+//Mongo Data Base Connection Configurations
+try {
+    mongoose.connect(uri)
+    console.log(`Connection Established to Data Base ✅`)
+} catch (error) {
+    console.log(`Error in establishing connection to Data Base ⚠️!: ${error}`)
+}
+    mongoose.connection.on('disconnected', ()=>{
+    console.log(`Connection to Data Base Terminated ❌`)
+})
+
+//port
+app.listen(port, ()=>{
+    console.log(`The app is live at : ${port} 🔥`);
+})
