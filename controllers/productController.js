@@ -68,6 +68,18 @@ const productController = {
       });
     }
   },
+  //Find Single Product
+  findOneProduct:async(req, res)=>{
+    try {
+        
+    } catch (error) {
+        console.log(`There was an error in findOneProduct controller: ${error}`);
+      return res.status(500).json({
+        success: false,
+        message: "There was an internal server error",
+      });
+    }
+  }
 };
 
 export default productController;

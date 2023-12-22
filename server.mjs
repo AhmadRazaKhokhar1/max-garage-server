@@ -19,6 +19,12 @@ app.use('/max-garage/api/', userRouter);
 app.use('/max-garage/api/', productRouter);
 
 app.use('/imagesCache', express.static('imagesCache'))
+
+//port
+app.listen(port, ()=>{
+    console.log(`The app is live at : ${port} 🔥`);
+});
+
 //Mongo Data Base Connection Configurations
 try {
     mongoose.connect(uri)
@@ -29,8 +35,6 @@ try {
     mongoose.connection.on('disconnected', ()=>{
     console.log(`Connection to Data Base Terminated ❌`)
 })
-
-//port
-app.listen(port, ()=>{
-    console.log(`The app is live at : ${port} 🔥`);
+mongoose.connection.on('connected', ()=>{
+    console.log(`Connection Established to Data Base ✅`)
 })

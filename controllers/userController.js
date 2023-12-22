@@ -6,9 +6,10 @@ const userController = {
   // Register Controller
   register: async (req, res) => {
     try {
-      const userExists = await UserModel.findOne({ email: req.body.email });
+      const emailExists = await UserModel.findOne({ email: req.body.email });
+      const numberExists = await UserModel.findOne({phone:req.body.phone})
 
-      if (userExists) {
+      if (emailExists || numberExists) {
         return res.status(409).json({
           success: false,
           message: "User already exists please login",
@@ -36,6 +37,7 @@ const userController = {
         industry: req.body.industry,
         qualification: req.body.qualification,
         password: req.body.password,
+        isAdmin:req.body.isAdmin,
       });
       
       const userDetails = await newUserDetails.save();
