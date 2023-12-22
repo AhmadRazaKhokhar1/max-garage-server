@@ -90,7 +90,7 @@ const userController = {
         token: token,
       });
     } catch (error) {
-      console.log(`There was an error in login controller⚠️: ${error}`);
+      console.log(`There was an error in login controller ⚠️: ${error}`);
       return res.status(500).json({
         success: false,
         message: "There was an internal server error",

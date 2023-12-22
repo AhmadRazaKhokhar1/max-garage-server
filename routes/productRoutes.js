@@ -4,7 +4,8 @@ import uploadFields from '../middlewares/multerMiddleWare.js';
 const productRouter = express.Router();
 
 productRouter.post('/cars',uploadFields, productController.addNewProduct);
-productRouter.post('/search', productController.findOneProduct);
+productRouter.get('/search/:key', productController.findProduct);
+productRouter.post('/search', productController.findProduct);
 
 
 export default productRouter;

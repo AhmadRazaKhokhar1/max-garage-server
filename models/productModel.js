@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import dotenv from 'dotenv'; dotenv.config();
+import dotenv from "dotenv";
+dotenv.config();
 const uri = process.env.MONGO_URI_MAX_GARAGE;
 
 const productSchema = new mongoose.Schema(
@@ -11,7 +12,7 @@ const productSchema = new mongoose.Schema(
     carModel: { type: String, required: true, text: true },
     carRegisteredIn: { type: String, required: true, text: true },
     carColor: { type: String, required: true, text: true },
-    carYearModel: { type: Number, text: true },
+    carYearModel: { type: Number },
     carFuelType: {
       type: String,
       required: true,
@@ -20,13 +21,13 @@ const productSchema = new mongoose.Schema(
     carBodyType: { type: String, required: true, text: true },
     carTransmissionType: { type: String, required: true, text: true },
     carMileage: { type: Number },
-    carAssembled: { type: String, text: true },
-    carEngineCapacity: { type: Number, text: true },
+    carAssembled: { type: String },
+    carEngineCapacity: { type: Number },
 
     //Product Authorization
-    carDocuments: { type: Boolean, default: false, text: true },
-    carTaxPaid: { type: Boolean, default: false, text: true },
-    carCondition: { type: String, text: true },
+    carDocuments: { type: Boolean, default: false },
+    carTaxPaid: { type: Boolean, default: false },
+    carCondition: { type: String },
 
     //Product Features
     carAirConditionerAndHeater: { type: Boolean, default: false },
@@ -51,9 +52,11 @@ const productSchema = new mongoose.Schema(
     carModified: { type: Boolean, default: false },
 
     //Featuring
-    carIsFeatured: { type: Boolean, default: false, text: true },
-    carIsPopularDeal: { type: Boolean, default: false, text: true },
+    carIsFeatured: { type: Boolean, default: false },
+    carIsPopularDeal: { type: Boolean, default: false },
 
+    //keywords
+    carKeyWords: { type: String },
     //Owner details
     carOwnerNumber: { type: String },
     carOwnerName: { type: String },
@@ -64,9 +67,7 @@ const productSchema = new mongoose.Schema(
     bufferTimeoutMS: 50000,
   }
 );
-productSchema.index({
-    name:"max_garage_users"
-})
+
 const ProductModel = new mongoose.model("Car_ad", productSchema);
 
 export default ProductModel;

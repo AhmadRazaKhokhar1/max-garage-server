@@ -1,5 +1,8 @@
 import uploadOnCloudinary from "../Utils/cloudinary.middleware.js";
 import ProductModel from "../models/productModel.js";
+import { MongoClient } from 'mongodb';
+
+
 const productController = {
   addNewProduct: async (req, res) => {
     try {
@@ -85,14 +88,23 @@ const productController = {
     }
   },
   //Find Single Product
-  findOneProduct: async (req, res) => {
+  findProduct: async (req, res) => {
     try {
-      const {searchQuery} = req.body;
+      const searchQuery = req.params.key;
 
-      await ProductModel.updateMany({}, { $set: { search: searchQuery } });
+      const result = await ProductModel.aggregate( [  {
+        '$search': {
+          'index': 'searchIndex',
+          'text': {
+            'query': req.params.key,
+             'path':{
+              'wildcard':'*'
+            }, 
+          },
+        },
+      },
 
-      // Use Atlas Search
-      const result = await ProductModel.find({ $text: { $search: searchQuery } })
+    ]);
       res.status(200).send({
         success:true,
         result:result,
