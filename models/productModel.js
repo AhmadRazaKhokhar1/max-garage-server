@@ -1,7 +1,4 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
-dotenv.config();
-const uri = process.env.MONGO_URI_MAX_GARAGE;
 
 const productSchema = new mongoose.Schema(
   {
