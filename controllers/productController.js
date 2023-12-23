@@ -1,7 +1,5 @@
 import uploadOnCloudinary from "../Utils/cloudinary.middleware.js";
 import ProductModel from "../models/productModel.js";
-import { MongoClient } from 'mongodb';
-
 
 const productController = {
   addNewProduct: async (req, res) => {
@@ -68,6 +66,9 @@ const productController = {
         carIsFeatured: req.body.carIsFeatured,
         carIsPopularDeal: req.body.carIsPopularDeal,
 
+        //Keywords for post
+        carKeyWords: req.body.carKeyWords,
+
         //Owner details
         carOwnerNumber: req.body.carRadio,
         carOwnerName: req.body.carOwnerName,
@@ -87,30 +88,50 @@ const productController = {
       });
     }
   },
-  //Find Single Product
+
+  //Find Products by keywords // Search Query
   findProduct: async (req, res) => {
     try {
-      const searchQuery = req.params.key;
-
-      const result = await ProductModel.aggregate( [  {
-        '$search': {
-          'index': 'searchIndex',
-          'text': {
-            'query': req.params.key,
-             'path':{
-              'wildcard':'*'
-            }, 
+      const result = await ProductModel.aggregate([
+        {
+          $search: {
+            index: "searchIndex",
+            text: {
+              query: req.params.key,
+              path: {
+                wildcard: "*",
+              },
+            },
           },
         },
-      },
-
-    ]);
+      ]);
       res.status(200).send({
-        success:true,
-        result:result,
-      })
+        success: true,
+        result: result,
+      });
     } catch (error) {
       console.log(`There was an error in findOneProduct controller: ${error}`);
+      return res.status(500).json({
+        success: false,
+        message: "There was an internal server error",
+      });
+    }
+  },
+
+  //delete product by id:
+  deleteProduct: async (req, res) => {
+    try {
+      const deletedProduct = await ProductModel.findOneAndDelete({_id: req.params.id, });
+
+      if(!deletedProduct){return res.status(404).json({success:false, message:"Product not found"})}
+
+      return res.status(200).json({
+        success: true,
+        message: "Product deleted successfully",
+        deletedProduct:deletedProduct,
+      });
+    } catch (error) {
+      console.log(`There was an erro in: ${error}`);
       return res.status(500).json({
         success: false,
         message: "There was an internal server error",
