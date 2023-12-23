@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import UserModel from '../models/userModel.js';
 import dotenv from 'dotenv'; dotenv.config();
 
 const verifyAdmin = async (req, res, next)=> {
@@ -17,9 +16,9 @@ const verifyAdmin = async (req, res, next)=> {
             next();
         }
         else{
-            res.status(409).send({
+          return  res.status(409).send({
                 success:false,
-                message:"Unauthorized attem"
+                message:"Unauthorized attempt"
             })
         }
     } catch (error) {
