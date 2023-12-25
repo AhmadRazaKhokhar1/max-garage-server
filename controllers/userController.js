@@ -1,6 +1,7 @@
 import uploadOnCloudinary from "../Utils/cloudinary.middleware.js";
 import UserModel from "../models/userModel.js";
 import bcrypt from "bcryptjs";
+//user controller
 
 const userController = {
   // Register Controller
@@ -17,6 +18,7 @@ const userController = {
       }
 
       const localProfileImage = req.files.profileImage[0]?.path;
+      const localCoverImage = req.files.coverImage? req.files.coverImage[0]?.path : null;
 
       if (!localProfileImage) {
         return res
@@ -24,11 +26,12 @@ const userController = {
           .json({ success: false, message: "Profile image is required" });
       }
       const profileImage = await uploadOnCloudinary(localProfileImage);
-      console.log(profileImage);
+      const coverImage = await uploadOnCloudinary(localCoverImage);
 
       const newUserDetails = await new UserModel({
         fullName: req.body.fullName,
         profileImage: profileImage,
+        coverImage: coverImage || "",
         email: req.body.email,
         phone: req.body.phone,
         age: req.body.age,

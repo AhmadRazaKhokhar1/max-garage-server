@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
     industry:{
         type:String, require:true,
     },
-    qulaification:{
+    qualification:{
         type:String, require:true
     },
     password:{
