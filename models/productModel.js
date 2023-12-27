@@ -10,11 +10,7 @@ const productSchema = new mongoose.Schema(
     carRegisteredIn: { type: String, required: true, text: true },
     carColor: { type: String, required: true, text: true },
     carYearModel: { type: Number },
-    carFuelType: {
-      type: String,
-      required: true,
-      text: true,
-    },
+    carFuelType: { type: String, required: true, text: true },
     carBodyType: { type: String, required: true, text: true },
     carTransmissionType: { type: String, required: true, text: true },
     carMileage: { type: Number },
@@ -30,16 +26,16 @@ const productSchema = new mongoose.Schema(
     carAirConditionerAndHeater: { type: Boolean, default: false },
     carRadio: { type: Boolean, default: false },
     carSpeaker: { type: Boolean, default: false },
-    carCdPlayer: { type: Boolean, default: false },
+    carCdAndDvdPlayer: { type: Boolean, default: false },
     carPowerSteering: { type: Boolean, default: false },
     carPowerWindows: { type: Boolean, default: false },
     carAutomaticDoors: { type: Boolean, default: false },
     carAlloyRims: { type: Boolean, default: false },
-    carRearCamera: { type: Boolean, default: false },
+    carFrontCamera: { type: Boolean, default: false },
+    carBackCamera: { type: Boolean, default: false },
     carNavigation: { type: Boolean, default: false },
     carKeyLessEntry: { type: Boolean, default: false },
     carSunRoof: { type: Boolean, default: false },
-    carDvdPlayer: { type: Boolean, default: false },
     carAppleCarPlay: { type: Boolean, default: false },
     carParkingSensors: { type: Boolean, default: false },
     carMobileWireLessCharging: { type: Boolean, default: false },
@@ -54,6 +50,7 @@ const productSchema = new mongoose.Schema(
 
     //keywords
     carKeyWords: { type: String },
+
     //Owner details
     carOwnerNumber: { type: String },
     carOwnerName: { type: String },
