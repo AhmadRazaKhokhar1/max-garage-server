@@ -3,8 +3,9 @@ import fs from "fs";
 const storage = new multer.diskStorage({
   destination: async (req, file, cb) => {
     const path = "C:/Users/USER/Desktop/Max Garage/Server/imagesCache";
-    cb(null, path);
-    fs.mkdirSync(path, { recursive: true });
+    if(!fs.existsSync(path)){
+      fs.mkdirSync(path, { recursive: true });
+    }
     cb(null, path);
   },
   filename: (req, file, cb) => {

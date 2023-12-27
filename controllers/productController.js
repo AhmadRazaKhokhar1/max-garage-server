@@ -4,13 +4,14 @@ import ProductModel from "../models/productModel.js";
 const productController = {
   addNewProduct: async (req, res) => {
     try {
-      const localCarImages = req.files.carImages[0]?.path;
+      const localCarImages = req.files.carImages.path;
       if (!localCarImages) {
         return res.status(400).json({
           success: false,
           message: "Product Images are required",
         });
       }
+      console.log(localCarImages)
       const carImages = await uploadOnCloudinary(localCarImages);
       if (!carImages) {
         console.log(`Error uploading to cloudinary`);
@@ -71,7 +72,7 @@ const productController = {
         carKeyWords: req.body.carKeyWords,
 
         //Owner details
-        carOwnerNumber: req.body.carRadio,
+        carOwnerNumber: req.body.carOwnerNumber,
         carOwnerName: req.body.carOwnerName,
         carOwnerEmail: req.body.carOwnerEmail,
       });
