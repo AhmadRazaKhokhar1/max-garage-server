@@ -4,6 +4,8 @@ import ProductModel from "../models/productModel.js";
 const productController = {
   addNewProduct: async (req, res) => {
     try {
+      console.log('Files in productController.addNewProduct:', req.files);
+
       const localCarImages = req.files.carImages.path;
       if (!localCarImages) {
         return res.status(400).json({
@@ -11,9 +13,8 @@ const productController = {
           message: "Product Images are required",
         });
       }
-      console.log(localCarImages)
       const carImages = await uploadOnCloudinary(localCarImages);
-      if (!carImages) {
+      if (!carImages || carImages.length === 0) {
         console.log(`Error uploading to cloudinary`);
         return res.status(500).json({
           success: false,

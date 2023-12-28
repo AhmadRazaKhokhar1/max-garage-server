@@ -1,65 +1,33 @@
 import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
-import fs from 'fs';
-import pLimit from 'p-limit';
-
 dotenv.config();
-
-// Cloudinary configurations
+import fs from 'fs'
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Upload function
-const uploadMultipleOnCloudinary = async (localFilePaths) => {
+const uploadMultipleOnCloudinary = async (files) => {
   try {
-    if (!localFilePaths || localFilePaths.length === 0) {
+    if (!files || !files.carImages || files.carImages.length === 0) {
+      console.error('Invalid or empty files array.');
+      console.log('Files at this point:', files); // Log for comparison
       return null;
     }
-    const limit = pLimit(10);
 
-    const uploadPromises = localFilePaths.map((localFilePath)=>{
-        return limit(async()=>{
-         const result =  await  cloudinary.uploader.upload(...localFilePath, { resource_type: 'auto' })
-         return result;
-        });
-    })
+    const responses = await Promise.all(
+      files.carImages.map(async (file) => {
+        const result = await cloudinary.uploader.upload(file.path, { resource_type: 'auto' });
+        fs.unlinkSync(files)
+        console.log(result);
+        return result;
+      })
+    );
 
-    const responses = await Promise.all(uploadPromises);
-   
-    // Clear cache folder for each uploaded file
-    responses.forEach((localFilePath) => {
-      try {
-        // Check if the file exists before attempting to delete it
-        if (fs.existsSync(localFilePath)) {
-          fs.unlinkSync(localFilePath);
-        }
-      } catch (error) {
-        console.error(`Error deleting file: ${error.message}`);
-      }
-    });
-
-    // Extract secure URLs from responses
-    const secureUrls = responses.map((response) => response.secure_url);
-
-    return secureUrls;
+    return responses;
   } catch (error) {
-    console.error(`Error in cloudinary uploader function: ${error}`);
-
-    // Clear cache folder for each uploaded file in case of an error
-    localFilePaths.forEach((localFilePath) => {
-      try {
-        // Check if the file exists before attempting to delete it
-        if (fs.existsSync(localFilePath)) {
-          fs.unlinkSync(localFilePath);
-        }
-      } catch (error) {
-        console.error(`Error deleting file: ${error.message}`);
-      }
-    });
-
+    console.error('Error in uploadMultipleOnCloudinary:', error);
     return null;
   }
 };
