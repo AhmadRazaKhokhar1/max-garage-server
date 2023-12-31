@@ -1,19 +1,18 @@
-import uploadOnCloudinary from "../Utils/cloudinary.middleware.js";
+import uploadMultipleOnCloudinary from "../Utils/cloudinaryMultipleMiddleWare.js";
 import ProductModel from "../models/productModel.js";
 
 const productController = {
   addNewProduct: async (req, res) => {
     try {
-      console.log('Files in productController.addNewProduct:', req.files);
 
-      const localCarImages = req.files.carImages.path;
-      if (!localCarImages) {
+      const localCarImages = req.files;
+      if (!localCarImages || localCarImages.length === 0) {
         return res.status(400).json({
           success: false,
           message: "Product Images are required",
         });
       }
-      const carImages = await uploadOnCloudinary(localCarImages);
+      const carImages = await uploadMultipleOnCloudinary(localCarImages);
       if (!carImages || carImages.length === 0) {
         console.log(`Error uploading to cloudinary`);
         return res.status(500).json({

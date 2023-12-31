@@ -4,15 +4,15 @@ const productSchema = new mongoose.Schema(
   {
     //Important Details
 
-    carImages: { type: [String], required: true },
-    carBrandMake: { type: String, required: true, text: true },
-    carModel: { type: String, required: true, text: true },
-    carRegisteredIn: { type: String, required: true, text: true },
-    carColor: { type: String, required: true, text: true },
+    carImages: { type: [String], },
+    carBrandMake: { type: String,  text: true },
+    carModel: { type: String,  text: true },
+    carRegisteredIn: { type: String,  text: true },
+    carColor: { type: String,  text: true },
     carYearModel: { type: Number },
-    carFuelType: { type: String, required: true, text: true },
-    carBodyType: { type: String, required: true, text: true },
-    carTransmissionType: { type: String, required: true, text: true },
+    carFuelType: { type: String,  text: true },
+    carBodyType: { type: String,  text: true },
+    carTransmissionType: { type: String,  text: true },
     carMileage: { type: Number },
     carAssembled: { type: String },
     carEngineCapacity: { type: Number },

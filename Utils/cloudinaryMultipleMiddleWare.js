@@ -1,7 +1,10 @@
+
 import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
 dotenv.config();
-import fs from 'fs'
+import fs from 'fs';
+
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -10,21 +13,21 @@ cloudinary.config({
 
 const uploadMultipleOnCloudinary = async (files) => {
   try {
-    if (!files || !files.carImages || files.carImages.length === 0) {
-      console.error('Invalid or empty files array.');
-      console.log('Files at this point:', files); // Log for comparison
-      return null;
-    }
+    console.log('Files in uploadMultipleOnCloudinary:', files);
+    
+    const uploadPromises = files.map((file) => {
+      const imgpath = file.path;
+      return new Promise((resolve, reject) => {
+        cloudinary.uploader.upload(imgpath, (result, error) => {
+          if(!result){console.log(error)}else{console.log(result.url)}
+          resolve(result);
+          fs.unlinkSync(imgpath)
+        });
+      });
+    });
 
-    const responses = await Promise.all(
-      files.carImages.map(async (file) => {
-        const result = await cloudinary.uploader.upload(file.path, { resource_type: 'auto' });
-        fs.unlinkSync(files)
-        console.log(result);
-        return result;
-      })
-    );
-
+    const responses = await Promise.all(uploadPromises);
+    console.log(responses)
     return responses;
   } catch (error) {
     console.error('Error in uploadMultipleOnCloudinary:', error);
