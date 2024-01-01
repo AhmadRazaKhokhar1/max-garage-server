@@ -1,9 +1,7 @@
-
-import { v2 as cloudinary } from 'cloudinary';
-import dotenv from 'dotenv';
+import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
 dotenv.config();
-import fs from 'fs';
-
+import fs from "fs";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -13,24 +11,31 @@ cloudinary.config({
 
 const uploadMultipleOnCloudinary = async (files) => {
   try {
-    console.log('Files in uploadMultipleOnCloudinary:', files);
-    
+    console.log("Files in uploadMultipleOnCloudinary:", files);
+
+    const secureUrls = [];
     const uploadPromises = files.map((file) => {
       const imgpath = file.path;
       return new Promise((resolve, reject) => {
         cloudinary.uploader.upload(imgpath, (result, error) => {
-          if(!result){console.log(error)}else{console.log(result.url)}
+          if (!result) {
+            console.log(error);
+            reject(error);
+
+          }
+          console.log(result);
+          console.log(secureUrls.push(result));
           resolve(result);
-          fs.unlinkSync(imgpath)
+          fs.unlinkSync(imgpath);
         });
       });
     });
 
     const responses = await Promise.all(uploadPromises);
-    console.log(responses)
+    console.log(responses);
     return responses;
   } catch (error) {
-    console.error('Error in uploadMultipleOnCloudinary:', error);
+    console.error("Error in uploadMultipleOnCloudinary:", error);
     return null;
   }
 };

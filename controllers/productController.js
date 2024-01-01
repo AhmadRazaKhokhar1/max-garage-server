@@ -5,7 +5,7 @@ const productController = {
   addNewProduct: async (req, res) => {
     try {
 
-      const localCarImages = req.files;
+      const localCarImages = req.files.carImages;
       if (!localCarImages || localCarImages.length === 0) {
         return res.status(400).json({
           success: false,
