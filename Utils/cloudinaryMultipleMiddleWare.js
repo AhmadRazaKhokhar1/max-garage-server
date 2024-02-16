@@ -24,7 +24,8 @@ const uploadMultipleOnCloudinary = async (files) => {
 
           }
           console.log(result);
-          console.log(secureUrls.push(result));
+          secureUrls.push(result)
+          console.log(secureUrls);
           resolve(result);
           fs.unlinkSync(imgpath);
         });
